@@ -3,6 +3,38 @@
 This folder presents the model architecture, learning objectives, and the
 difference between the three routes.
 
+## Requirements
+
+- Python 3.10 or later
+- PyTorch 2.0 or later
+
+Install the runtime dependency with:
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+## Minimal usage
+
+```python
+import torch
+
+from three_routes import FourLocationTeacher, RightArmStudent
+
+student = RightArmStudent().eval()
+teacher = FourLocationTeacher().eval()
+
+right_arm = torch.randn(2, 50, 7)
+four_locations = torch.randn(2, 4, 50, 7)
+
+with torch.no_grad():
+    student_output = student(right_arm)
+    teacher_output = teacher(four_locations)
+
+print(student_output.logits.shape)  # torch.Size([2, 19])
+print(teacher_output.logits.shape)  # torch.Size([2, 19])
+```
+
 ## Student architecture
 
 All three routes deploy the same right-arm student:
@@ -103,8 +135,8 @@ in steps 5–7.
 
 ## Reference implementation
 
-The implementation uses PyTorch 2.x. Its default architecture matches the
-dimensions above: an 80,915-parameter student and a 191,507-parameter teacher.
+The default architecture matches the dimensions above: an 80,915-parameter
+student and a 191,507-parameter teacher.
 
 ## File
 
